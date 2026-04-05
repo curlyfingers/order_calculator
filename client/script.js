@@ -17,22 +17,34 @@ async function preload(){
   }
 
   const btn = document.getElementById("calculate-btn");
-  btn.prevent
   btn.addEventListener("click", fecthOrderConfiguration);
 }
 
 async function fecthOrderConfiguration(event) {
   event.preventDefault();
+
+  const errorContainer = document.getElementById("error");
+  const resultContainer = document.getElementById("order-configuration");
+
   const orderSize = document.getElementById("order-size").value;
   const response = await fetch('/api/order', {
     headers: {'Content-Type': 'application/json'},
     method: 'POST',
     body: JSON.stringify({ order_size: parseInt(orderSize, 10) }),
   });
-  
-  const {order_configuration: orderConfiguration} = await response.json();
 
-  const resultContainer = document.getElementById("order-configuration");
+  const body = await response.json();
+  console.log(body)
+  if(!response.ok){
+    const error = body.error;
+    errorContainer.textContent = error;
+    errorContainer.classList.remove("hidden");
+    return;
+  }
+
+  errorContainer.classList.add("hidden");
+
+  const orderConfiguration = body.order_configuration;
   resultContainer.innerHTML = "";
   resultContainer.parentElement.classList.remove("hidden");
   for(item of Object.getOwnPropertyNames(orderConfiguration)){
