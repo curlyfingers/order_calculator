@@ -7,10 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <title>Order Calculator</title>
 </head>
-<body>
+<body class="bg-gray-200">
   <div class="grid grid-cols-3">
     <div class=" col-start-2 grid grid-rows-6 w-auto">
-      <div class="row-span-4 row-start-2 p-4 rounded shadow grid grid-rows-3">
+      <div class="row-span-4 row-start-2 p-4 rounded-lg shadow-2xl grid grid-rows-3 bg-gray-100">
         <h1 class="text-4xl font-bold tracking-tight text-gray-900 text-center align-center my-8">Order Calculator</h1>
         <form class="w-lg">
           <div>
@@ -21,7 +21,7 @@
           <div>
             <label class="font-bold mb-2 mx-4 text-justify">Number of items</label>
             <input id="order-size" required class="border p-2 w-full rounded mx-2">
-            <label id="error" class="hidden"></label>
+            <label id="error" class="hidden font-bold mb-2 py-4 mx-4 text-justify text-red-500"></label>
           </div>
           <button id="calculate-btn" class="bg-blue-500 text-white p-2 rounded m-2">Calculate</button>
 

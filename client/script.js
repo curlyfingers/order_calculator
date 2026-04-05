@@ -8,7 +8,7 @@ async function preload(){
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const div = document.createElement("div");
     div.classList.add("border-4");
-    div.classList.add("rounded-xl");
+    div.classList.add("rounded-sm");
     div.classList.add("m-2");
     div.classList.add("px-2");
     div.classList.add("border-"+randomColor);
@@ -33,10 +33,9 @@ async function fecthOrderConfiguration(event) {
     body: JSON.stringify({ order_size: parseInt(orderSize, 10) }),
   });
 
-  const body = await response.json();
-  console.log(body)
+  const {error, order_configuration: orderConfiguration} = await response.json();
   if(!response.ok){
-    const error = body.error;
+    resultContainer.parentElement.classList.add("hidden");
     errorContainer.textContent = error;
     errorContainer.classList.remove("hidden");
     return;
@@ -44,7 +43,6 @@ async function fecthOrderConfiguration(event) {
 
   errorContainer.classList.add("hidden");
 
-  const orderConfiguration = body.order_configuration;
   resultContainer.innerHTML = "";
   resultContainer.parentElement.classList.remove("hidden");
   for(item of Object.getOwnPropertyNames(orderConfiguration)){

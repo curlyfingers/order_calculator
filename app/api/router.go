@@ -25,9 +25,5 @@ func NewRouter(cfg config.Config) *gin.Engine {
 		ctx.File("./client/script.js")
 	})
 
-	router.GET("/assets/styles.css", func(ctx *gin.Context) {
-		ctx.File("./client/styles.css")
-	})
-
 	return router
 }
