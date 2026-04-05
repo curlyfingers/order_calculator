@@ -1,6 +1,11 @@
 package config
 
-import "slices"
+import (
+	"encoding/json"
+	"log"
+	"os"
+	"slices"
+)
 
 const DefaultPort = "8080"
 
@@ -16,22 +21,42 @@ type Config struct {
 }
 
 func LoadConfig() Config {
-	return Config{}
+	cfg := Config{
+		port:      DefaultPort,
+		packSizes: DefaultPackSizes,
+	}
+
+	cfgFile, err := os.Open("config.json")
+	if err != nil {
+		log.Printf("Error while reading config file: %s\n", err)
+	}
+
+	defer cfgFile.Close()
+
+	temp := struct {
+		Port  string `json:"port"`
+		Packs []int  `json:"pack_sizes"`
+	}{}
+
+	decoder := json.NewDecoder(cfgFile)
+	decoder.Decode(&temp)
+
+	if temp.Port != "" {
+		cfg.port = temp.Port
+	}
+
+	if len(temp.Packs) > 0 {
+		slices.Sort(temp.Packs)
+		cfg.packSizes = temp.Packs
+	}
+
+	return cfg
 }
 
 func (c Config) Port() string {
-	if c.port != "" {
-		return c.port
-	}
-
-	return DefaultPort
+	return c.port
 }
 
 func (c Config) PackSizes() []int {
-	if len(c.packSizes) > 0 {
-		slices.Sort(c.packSizes)
-		return c.packSizes
-	}
-
-	return DefaultPackSizes
+	return c.packSizes
 }
