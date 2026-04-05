@@ -17,8 +17,6 @@ WORKDIR /app
 COPY --from=builder /app/server ./server
 COPY --from=builder /app/client ./client
 
-ENV GIN_MODE=release
-
 EXPOSE 8080
 
 CMD ["./server"] 
