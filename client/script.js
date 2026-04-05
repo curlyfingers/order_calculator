@@ -3,15 +3,13 @@ async function preload(){
 
   const {pack_sizes: packSizes = []} = await response.json();
   const container = document.getElementById("available-pack-sizes");
-  const colors = ['red-500', 'blue-500', 'green-500', 'yellow-500', 'purple-500','orange-500','yellow-500'];
   for(pack of packSizes){
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const div = document.createElement("div");
     div.classList.add("border-4");
     div.classList.add("rounded-sm");
     div.classList.add("m-2");
     div.classList.add("px-2");
-    div.classList.add("border-"+randomColor);
+    div.classList.add("border-blue-200");
     div.textContent = pack;
     container.appendChild(div);
   }
