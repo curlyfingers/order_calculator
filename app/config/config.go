@@ -15,11 +15,13 @@ var (
 	}
 )
 
+// Config represents necessary configurations for the application, namely port and available pack sizes.
 type Config struct {
 	port      string
 	packSizes []int
 }
 
+// LoadConfig creates an instance of Config and populates it whether from `config.json` file or from Defaults.
 func LoadConfig() Config {
 	cfg := Config{
 		port:      DefaultPort,
@@ -53,10 +55,12 @@ func LoadConfig() Config {
 	return cfg
 }
 
+// Port returns string representation of port number.
 func (c Config) Port() string {
 	return c.port
 }
 
+// PackSizes returns slice of available pack sizes sorted increasingly.
 func (c Config) PackSizes() []int {
 	return c.packSizes
 }

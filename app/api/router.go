@@ -6,10 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type OrderRequest struct {
-	OrderSize int `form:"order_size" json:"order_size"`
-}
-
+// NewRouter returns a router containing necessary API routes, as well as static files for UI.
 func NewRouter(cfg config.Config) *gin.Engine {
 	router := gin.Default()
 

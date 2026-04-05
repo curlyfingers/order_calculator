@@ -2,11 +2,13 @@ package api
 
 import (
 	"net/http"
+
 	"order_calculator/app/calculator"
 
 	"github.com/gin-gonic/gin"
 )
 
+// GetPacksResponse represents response for GET /packs.
 type GetPacksResponse struct {
 	PackSizes []int `json:"pack_sizes"`
 }
@@ -17,6 +19,13 @@ func getPackSizes(availablePackSizes []int) gin.HandlerFunc {
 	}
 }
 
+// OrderRequest respresents required data for POST /order call.
+type OrderRequest struct {
+	OrderSize int `form:"order_size" json:"order_size"`
+}
+
+// PostOrderResponse represents possible values resulting from the call to POST /order.
+// It will contain either `order_configuration` for successful result, or `error` for failed one.
 type PostOrderResponse struct {
 	OrderConfiguration map[int]int `json:"order_configuration,omitempty"`
 	Error              string      `json:"error,omitempty"`
