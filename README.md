@@ -27,6 +27,8 @@ Explanation:
 This is better in terms of packs sent than sending {100: 2} or {500: 4} or {250:8}, or any other permutation of pack sizes under 200 due to same overshipping amount, but smaller packaging overhead.
 
 ### Demo
+[demo.webm](https://github.com/user-attachments/assets/28fc31d8-13b9-479a-8225-65c3c6576dc4)
+
 
 ### Usage
 
