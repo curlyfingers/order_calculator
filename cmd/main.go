@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	cfg := config.LoadConfig()
+	cfg := config.LoadConfig("")
 	r := api.NewRouter(cfg)
 
 	r.Run(fmt.Sprintf(":%s", cfg.Port()))

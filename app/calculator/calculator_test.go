@@ -5,63 +5,67 @@ import (
 	"testing"
 )
 
-func TestCalculatePacks(t *testing.T) {
-	tests := []struct {
+var (
+	packSizes = []int{250, 500, 1000, 2000, 5000}
+)
+
+func TestCalculateOrderConfiguration(t *testing.T) {
+	testCases := []struct {
 		name      string
-		packSizes []int
-		order     int
-		expect    map[int]int
+		orderSize int
+		expected  map[int]int
 	}{
 		{
-			name:      "Single pack size, exact",
-			packSizes: []int{250},
-			order:     500,
-			expect:    map[int]int{250: 2},
+			name:      "Zero items",
+			orderSize: 0,
+			expected:  map[int]int{},
 		},
 		{
-			name:      "Multiple pack sizes, optimal",
-			packSizes: []int{250, 500, 1000},
-			order:     1250,
-			expect:    map[int]int{1000: 1, 250: 1},
+			name:      "Sub smallest pack items",
+			orderSize: packSizes[0] - 1,
+			expected:  map[int]int{packSizes[0]: 1},
 		},
 		{
-			name:      "Cannot fulfill exactly - minimal overshipping",
-			packSizes: []int{250, 500},
-			order:     600,
-			expect:    map[int]int{250: 1, 500: 1}, // 750 total, overship by 150, fewer packs than 3x250
+			name:      "Exactly smallest pack items",
+			orderSize: packSizes[0],
+			expected:  map[int]int{packSizes[0]: 1},
 		},
 		{
-			name:      "Edge case: zero order",
-			packSizes: []int{250, 500},
-			order:     0,
-			expect:    map[int]int{},
+			name:      "Over smallest pack, but under next pack items",
+			orderSize: packSizes[0] + packSizes[1]/2 - 1,
+			expected:  map[int]int{packSizes[1]: 1},
 		},
 		{
-			name:      "Edge case: empty pack sizes",
-			packSizes: []int{},
-			order:     100,
-			expect:    map[int]int{},
+			name:      "Smallest + next - 10",
+			orderSize: packSizes[0] + packSizes[1] - 10,
+			expected:  map[int]int{packSizes[1]: 1, packSizes[0]: 1},
 		},
 		{
-			name:      "Large order, edge pack sizes",
-			packSizes: []int{23, 31, 53},
-			order:     500000,
-			expect:    map[int]int{23: 2, 31: 7, 53: 9429},
+			name:      "749",
+			orderSize: 749,
+			expected:  map[int]int{packSizes[0]: 1, packSizes[1]: 1},
 		},
 		{
-			name:      "Prefer fewer packs with same overshipping",
-			packSizes: []int{500, 1000},
-			order:     780,
-			expect:    map[int]int{1000: 1}, // 1x1000 is better than 2x500
+			name:      "751",
+			orderSize: 751,
+			expected:  map[int]int{1000: 1},
 		},
 	}
 
-	for _, tc := range tests {
+	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			got := CalculateOrderConfiguration(tc.packSizes, tc.order)
-			if !reflect.DeepEqual(got, tc.expect) {
-				t.Errorf("got %v, want %v", got, tc.expect)
+			actual := CalculateOrderConfiguration(packSizes, tc.orderSize)
+			if !reflect.DeepEqual(actual, tc.expected) {
+				t.Errorf("expected %v, but got %v instead", tc.expected, actual)
 			}
 		})
+	}
+}
+
+func TestCalculateOrderConfiguration_NoAvailablePackSizes(t *testing.T) {
+	expected := map[int]int{}
+	actual := CalculateOrderConfiguration([]int{}, 42)
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("expected %v, but got %v instead", expected, actual)
 	}
 }

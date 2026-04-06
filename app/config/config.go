@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"slices"
@@ -22,17 +23,20 @@ type Config struct {
 }
 
 // LoadConfig creates an instance of Config and populates it whether from `config.json` file or from Defaults.
-func LoadConfig() Config {
+func LoadConfig(filename string) Config {
+	if filename == "" {
+		filename = "config.json"
+	}
+
 	cfg := Config{
 		port:      DefaultPort,
 		packSizes: DefaultPackSizes,
 	}
 
-	cfgFile, err := os.Open("config.json")
+	cfgFile, err := os.Open(filename)
 	if err != nil {
 		log.Printf("Error while reading config file: %s\n", err)
 	}
-
 	defer cfgFile.Close()
 
 	temp := struct {
@@ -42,6 +46,8 @@ func LoadConfig() Config {
 
 	decoder := json.NewDecoder(cfgFile)
 	decoder.Decode(&temp)
+
+	fmt.Println(temp)
 
 	if temp.Port != "" {
 		cfg.port = temp.Port

@@ -1,4 +1,4 @@
-FROM golang:1.26-alpine AS builder
+FROM golang:1.26-alpine AS build
 
 WORKDIR /app
 
@@ -14,9 +14,9 @@ FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=builder /app/server ./server
-COPY --from=builder /app/config.sample.json ./config.json
-COPY --from=builder /app/client ./client
+COPY --from=build /app/server ./server
+COPY --from=build /app/config.json ./config.json
+COPY --from=build /app/client ./client
 
 EXPOSE 8080
 

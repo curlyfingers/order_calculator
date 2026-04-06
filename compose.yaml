@@ -22,4 +22,3 @@ services:
             - .gitignore
             - ./client
             - compose.yaml
-            - Dockerfile
