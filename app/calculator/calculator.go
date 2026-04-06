@@ -2,6 +2,7 @@ package calculator
 
 import (
 	"maps"
+	"math"
 )
 
 type solution struct {
@@ -44,8 +45,8 @@ func CalculateOrderConfiguration(availablePackSizes []int, orderSize int) map[in
 		}
 	}
 
-	minimalItems := orderSize + biggestPack
-	minimalPacks := orderSize
+	itemsOverSent := math.MaxInt - orderSize
+	packsSent := orderSize/availablePackSizes[0] + 1
 	result := map[int]int{}
 	// Select min overshipped items with min packs sent
 	for i := orderSize; i < solutionsSize; i++ {
@@ -53,14 +54,12 @@ func CalculateOrderConfiguration(availablePackSizes []int, orderSize int) map[in
 		if candidate == nil {
 			continue
 		}
-
-		if candidate.minShippedItems >= orderSize {
-			if candidate.minShippedItems < minimalItems ||
-				(candidate.minShippedItems == minimalItems && candidate.minPacksNumber < minimalPacks) {
-				result = candidate.packConfiguration
-				minimalItems = candidate.minShippedItems
-				minimalPacks = candidate.minPacksNumber
-			}
+		currItemsOverSent := candidate.minShippedItems - orderSize
+		if currItemsOverSent < itemsOverSent ||
+			(currItemsOverSent == itemsOverSent && candidate.minPacksNumber < packsSent) {
+			result = candidate.packConfiguration
+			itemsOverSent = orderSize - candidate.minShippedItems
+			packsSent = candidate.minPacksNumber
 		}
 	}
 

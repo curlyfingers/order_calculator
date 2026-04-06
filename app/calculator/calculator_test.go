@@ -50,6 +50,16 @@ func TestCalculateOrderConfiguration(t *testing.T) {
 			orderSize: 751,
 			expected:  map[int]int{1000: 1},
 		},
+		{
+			name:      "1750",
+			orderSize: 1750,
+			expected:  map[int]int{1000: 1, 500: 1, 250: 1},
+		},
+		{
+			name:      "1751",
+			orderSize: 1751,
+			expected:  map[int]int{2000: 1},
+		},
 	}
 
 	for _, tc := range testCases {

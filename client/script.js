@@ -5,11 +5,10 @@ async function preload(){
   const container = document.getElementById("available-pack-sizes");
   for(pack of packSizes){
     const div = document.createElement("div");
-    div.classList.add("border-4");
     div.classList.add("rounded-sm");
     div.classList.add("m-2");
     div.classList.add("px-2");
-    div.classList.add("border-blue-200");
+    div.classList.add("bg-gray-300");
     div.textContent = pack;
     container.appendChild(div);
   }
@@ -44,9 +43,22 @@ async function fecthOrderConfiguration(event) {
   resultContainer.innerHTML = "";
   resultContainer.parentElement.classList.remove("hidden");
   for(item of Object.getOwnPropertyNames(orderConfiguration)){
-    const child = document.createElement("div");
-    child.textContent = `${orderConfiguration[item]} x ${item}`
-    resultContainer.appendChild(child)
+    const div = document.createElement("div");
+    div.classList.add("rounded-sm");
+    div.classList.add("m-2");
+    div.classList.add("px-2");
+    div.classList.add("bg-gray-300");
+    div.textContent = item;
+    const configEntry = document.createElement("div");
+    configEntry.classList.add("flex");
+    configEntry.classList.add("items-center");
+    configEntry.classList.add("flex-row");
+    const quantityNode = document.createElement("div");
+    quantityNode.textContent = `${orderConfiguration[item]} x`;
+    configEntry.appendChild(quantityNode);
+    configEntry.appendChild(div);
+
+    resultContainer.appendChild(configEntry)
   }
 }
 
